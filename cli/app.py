@@ -24,7 +24,7 @@ class MistbornApp(cli.Application):
         pass
 
 @MistbornApp.subcommand("pullbuild")
-class MistbornConf(cli.Application):
+class MistbornPullBuild(cli.Application):
     """
     Pull & Build docker images (while DNS is up).
     """
