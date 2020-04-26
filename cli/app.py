@@ -42,7 +42,7 @@ class MistbornConf(cli.Application):
         """
         Main function for Mistborn CONF cli functionality
         """
-        return subprocess.check_output(f'docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
+        subprocess.run(f'docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
