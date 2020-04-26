@@ -1,0 +1,24 @@
+image: ubuntu:latest 
+
+variables:
+  GIT_SUBMODULE_STRATEGY: "recursive"
+  
+stages:
+  - test
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+docker_build:
+  stage: test
+  before_script:
+    - apt-get update
+    - apt-get install -y software-properties-common curl
+    - apt-get update
+    - apt-get install -y virtualenv libvirt-dev python3-dev git
+  script:
+    - virtualenv -p `which python3` envmistborn-cli
+    - source envmistborn-cli/bin/activate
+    - pip install .
+    - python setup.py test
+
