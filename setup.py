@@ -17,6 +17,6 @@ setup(
     install_requires=[
         'plumbum==1.6.9',
     ],
-    test_suite='tests.test_mistborn',
+    test_suite='tests.test_mistborn-cli',
     keywords=['mistborn']
 )
