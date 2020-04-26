@@ -23,6 +23,18 @@ class MistbornApp(cli.Application):
         """
         pass
 
+@MistbornApp.subcommand("pullbuild")
+class MistbornConf(cli.Application):
+    """
+    Pull & Build docker images (while DNS is up).
+    """
+    def main(self):
+        """
+        Main function for Mistborn pulling and building docker images functionality
+        """
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
+
 @MistbornApp.subcommand("getconf")
 class MistbornConf(cli.Application):
     """
@@ -42,7 +54,7 @@ class MistbornConf(cli.Application):
         """
         Main function for Mistborn CONF cli functionality
         """
-        subprocess.run(f'docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
