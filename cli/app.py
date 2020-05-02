@@ -3,6 +3,8 @@ import os
 import subprocess
 from plumbum import cli
 
+from .wifi import MistbornWifi
+
 class MistbornApp(cli.Application):
     """
     Main CLI App for Mistborn
@@ -83,6 +85,8 @@ class MistbornPing(cli.Application):
         Main function for Mistborn ping
         """
         print("mistborn-cli: pong")
+
+MistbornWifi = MistbornApp.subcommand("wifi", MistbornWifi)
 
 if __name__ == "__main__":
     MistbornApp.run()
