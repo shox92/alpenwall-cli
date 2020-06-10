@@ -1,0 +1,6 @@
+[submodule "cli/roles/wireguard"]
+	path = cli/roles/wireguard
+	url = https://github.com/sfoerster/ansible-role-wireguard.git
+[submodule "cli/roles/docker"]
+	path = cli/roles/docker
+	url = https://github.com/sfoerster/ansible-docker.git

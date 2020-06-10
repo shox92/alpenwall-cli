@@ -16,6 +16,7 @@ setup(
     setup_requires=[],
     install_requires=[
         'plumbum==1.6.9',
+        'ansible==2.9.9',
     ],
     test_suite='tests.test_mistborn-cli',
     keywords=['mistborn']
