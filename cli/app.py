@@ -3,9 +3,11 @@ import os
 import subprocess
 from plumbum import cli
 
+from .install import MistbornInstall
+
 class MistbornApp(cli.Application):
     """
-    Main CLI App for Mistborn
+    Cyber5K Mistborn CLI
     """
     
     compose_file = cli.SwitchAttr("--compose-file", cli.ExistingFile,
@@ -21,7 +23,7 @@ class MistbornApp(cli.Application):
         """
         Main function for the Mistborn CLI
         """
-        pass
+        print("Cyber5K Mistborn Command Line Interface. Usage: mistborn-cli --help")
 
 @MistbornApp.subcommand("pullbuild")
 class MistbornPullBuild(cli.Application):
@@ -83,6 +85,9 @@ class MistbornPing(cli.Application):
         Main function for Mistborn ping
         """
         print("mistborn-cli: pong")
+
+MistbornApp.subcommand("install")(MistbornInstall)
+
 
 if __name__ == "__main__":
     MistbornApp.run()
