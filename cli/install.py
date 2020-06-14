@@ -13,3 +13,10 @@ class MistbornInstall(cli.Application):
         Main function for Mistborn installation
         """
         print("mistborn-cli: install")
+
+    
+    def docker(self):
+        """
+        Install docker and docker compose
+        """
+        subprocess.check_output("ansible-playbook -i localhost playbooks/docker.yml", shell=True)
