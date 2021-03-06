@@ -7,14 +7,18 @@ class MistbornApp(cli.Application):
     """
     Main CLI App for Mistborn
     """
+
+    home_dir = cli.SwitchAttr("--home-dir", cli.ExistingFile,
+                              help="The Mistborn home directory",
+                              default=os.path.join('/','opt','mistborn'))
     
     compose_file = cli.SwitchAttr("--compose-file", cli.ExistingFile,
                                  help="The Docker Compose file to use",
-                                 default="/opt/mistborn/base.yml")
+                                 default=os.path.join(home_dir, "base.yml"))
     
     env_file = cli.SwitchAttr("--env-file", cli.ExistingFile,
                                  help="The environment variable file to use with docker compose: [KEY]=[VAL] format",
-                                 default="/opt/mistborn/.env",
+                                 default=os.path.join(home_dir, ".env"),
                                  requires=['--compose-file'])
 
     def main(self):
@@ -55,6 +59,19 @@ class MistbornConf(cli.Application):
         Main function for Mistborn CONF cli functionality
         """
         subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
+
+@MistbornApp.subcommand("passwd")
+class MistbornPasswd(cli.Application):
+    """
+    PASSWD sub-command (set/reset Mistborn default password)
+    """
+
+    def main(self):
+        """
+        Main function for Mistborn PASSWD cli functionality
+        """
+        mistborn_default_password = input("New Mistborn Default Password: ")
+        subprocess.run(f"", shell=True)
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
