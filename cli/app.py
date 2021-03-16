@@ -15,18 +15,19 @@ class MistbornApp(cli.Application):
     
     compose_file = cli.SwitchAttr("--compose-file", cli.ExistingFile,
                                  help="The Docker Compose file to use",
-                                 default=os.path.join(home_dir.default, "base.yml"))
+                                 default="base.yml")
     
     env_file = cli.SwitchAttr("--env-file", cli.ExistingFile,
                                  help="The environment variable file to use with docker compose: [KEY]=[VAL] format",
-                                 default=os.path.join(home_dir.default, ".env"),
+                                 default=".env",
                                  requires=['--compose-file'])
 
     def main(self):
         """
         Main function for the Mistborn CLI
         """
-        pass
+        self.compose_filepath = os.path.join(self.home_dir, self.compose_file)
+        self.env_filepath = os.path.join(self.home_dir, self.env_file)
 
 @MistbornApp.subcommand("pullbuild")
 class MistbornPullBuild(cli.Application):
@@ -37,8 +38,8 @@ class MistbornPullBuild(cli.Application):
         """
         Main function for Mistborn pulling and building docker images functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_filepath} --env-file {self.parent.env_filepath} pull', shell=True) 
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_filepath} --env-file {self.parent.env_filepath} build', shell=True) 
 
 @MistbornApp.subcommand("getconf")
 class MistbornConf(cli.Application):
@@ -59,7 +60,7 @@ class MistbornConf(cli.Application):
         """
         Main function for Mistborn CONF cli functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_filepath} --env-file {self.parent.env_filepath} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
 
 @MistbornApp.subcommand("passwd")
 class MistbornPasswd(cli.Application):
@@ -113,6 +114,7 @@ class MistbornPing(cli.Application):
         """
         Main function for Mistborn ping
         """
+        print(f"mistborn-cli: COMPOSE {self.compose_filepath} ; ENV {self.env_filepath}")
         print("mistborn-cli: pong")
 
 if __name__ == "__main__":
