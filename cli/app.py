@@ -76,17 +76,70 @@ class MistbornPasswd(cli.Application):
         #mistborn_default_password = input("New Mistborn Default Password: ")
         #subprocess.run(f"", shell=True)
 
-@MistbornApp.subcommand("traefik")
-class MistbornTraefik(cli.Application):
+@MistbornApp.subcommand("redis")
+class MistbornRedis(cli.Application):
+    """
+    REDIS sub-command (set routing key/value pairs)
+    """
+
+    redis_host = cli.SwitchAttr("--redis-host", str,
+                            help="Redis host address",
+                            default="127.0.0.1")
+    
+    redis_port = cli.SwitchAttr("--redis-port", int,
+                            help="Redis host port",
+                            default=6379)
+    
+    redis_db = cli.SwitchAttr("--redis-db", int,
+                            help="Redis database",
+                            default=0)
+    
+    def main(self):
+        """
+        Main function for Mistborn REDIS cli functionality
+        """
+        self.redis_conn = redis.Redis(host=self.redis_host,
+                                      port=self.redis_port,
+                                      db=self.redis_db)
+        
+
+@MistbornApp.subcommand("traefik-extra")
+class MistbornTraefik(MistbornRedis):
     """
     TRAEFIK sub-command (set routing key/value pairs)
     """
+    
+    domain_name = cli.SwitchAttr("--domain-name", str,
+                        help="Service domain name",
+                        mandatory=True)
+    
+    service_name = cli.SwitchAttr("--service-name", str,
+                        help="Service name",
+                        mandatory=True)
+    
+    web_port = cli.SwitchAttr("--web-port", int,
+                    help="Service web port",
+                    mandatory=True)
 
     def main(self):
         """
         Main function for Mistborn TRAEFIK cli functionality
         """
-        pass
+        
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/rule", f"Host(`{domain_name}`)")
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/entryPoints/0", "web")
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/middlewares/0", "mistborn_auth@file")
+
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/rule", f"Host(`{domain_name}`)")
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/entryPoints/0", "websecure")
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/middlewares/0", "mistborn_auth@file")
+
+        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/tls/certResolver", "basic")
+
+        self.parent.redis_conn.set(f"traefik/http/services/{service_name}-service/loadBalancer/servers/0/url", f"http://{domain_name}:{web_port}")
+        self.parent.redis_conn.set(f"traefik/http/services/{service_name}-service/loadBalancer/servers/1/url", f"https://{domain_name}:{web_port}")
+
+
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
