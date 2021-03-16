@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 from plumbum import cli
+import redis
 
 class MistbornApp(cli.Application):
     """
@@ -70,8 +71,21 @@ class MistbornPasswd(cli.Application):
         """
         Main function for Mistborn PASSWD cli functionality
         """
-        mistborn_default_password = input("New Mistborn Default Password: ")
-        subprocess.run(f"", shell=True)
+        pass
+        #mistborn_default_password = input("New Mistborn Default Password: ")
+        #subprocess.run(f"", shell=True)
+
+@MistbornApp.subcommand("traefik")
+class MistbornTraefik(cli.Application):
+    """
+    TRAEFIK sub-command (set routing key/value pairs)
+    """
+
+    def main(self):
+        """
+        Main function for Mistborn TRAEFIK cli functionality
+        """
+        pass
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
