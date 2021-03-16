@@ -114,7 +114,7 @@ class MistbornPing(cli.Application):
         """
         Main function for Mistborn ping
         """
-        print(f"mistborn-cli: COMPOSE {self.compose_filepath} ; ENV {self.env_filepath}")
+        print(f"mistborn-cli: COMPOSE {self.parent.compose_filepath} ; ENV {self.parent.env_filepath}")
         print("mistborn-cli: pong")
 
 if __name__ == "__main__":
