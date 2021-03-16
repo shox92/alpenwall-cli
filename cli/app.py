@@ -15,11 +15,11 @@ class MistbornApp(cli.Application):
     
     compose_file = cli.SwitchAttr("--compose-file", cli.ExistingFile,
                                  help="The Docker Compose file to use",
-                                 default=os.path.join(home_dir, "base.yml"))
+                                 default=os.path.join(self.home_dir, "base.yml"))
     
     env_file = cli.SwitchAttr("--env-file", cli.ExistingFile,
                                  help="The environment variable file to use with docker compose: [KEY]=[VAL] format",
-                                 default=os.path.join(home_dir, ".env"),
+                                 default=os.path.join(self.home_dir, ".env"),
                                  requires=['--compose-file'])
 
     def main(self):
