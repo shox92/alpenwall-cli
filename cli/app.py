@@ -103,8 +103,8 @@ class MistbornRedis(cli.Application):
                                       db=self.redis_db)
         
 
-@MistbornApp.subcommand("traefik-extra")
-class MistbornTraefik(MistbornRedis):
+@MistbornRedis.subcommand("traefik-extra")
+class MistbornTraefik(cli.Application):
     """
     TRAEFIK sub-command (set routing key/value pairs)
     """
@@ -126,18 +126,18 @@ class MistbornTraefik(MistbornRedis):
         Main function for Mistborn TRAEFIK cli functionality
         """
         
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/rule", f"Host(`{domain_name}`)")
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/entryPoints/0", "web")
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-http/middlewares/0", "mistborn_auth@file")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-http/rule", f"Host(`{self.domain_name}`)")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-http/entryPoints/0", "web")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-http/middlewares/0", "mistborn_auth@file")
 
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/rule", f"Host(`{domain_name}`)")
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/entryPoints/0", "websecure")
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/middlewares/0", "mistborn_auth@file")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-https/rule", f"Host(`{self.domain_name}`)")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-https/entryPoints/0", "websecure")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-https/middlewares/0", "mistborn_auth@file")
 
-        self.parent.redis_conn.set(f"traefik/http/routers/{service_name}-https/tls/certResolver", "basic")
+        self.parent.redis_conn.set(f"traefik/http/routers/{self.service_name}-https/tls/certResolver", "basic")
 
-        self.parent.redis_conn.set(f"traefik/http/services/{service_name}-service/loadBalancer/servers/0/url", f"http://{domain_name}:{web_port}")
-        self.parent.redis_conn.set(f"traefik/http/services/{service_name}-service/loadBalancer/servers/1/url", f"https://{domain_name}:{web_port}")
+        self.parent.redis_conn.set(f"traefik/http/services/{self.service_name}-service/loadBalancer/servers/0/url", f"http://{self.domain_name}:{self.web_port}")
+        self.parent.redis_conn.set(f"traefik/http/services/{self.service_name}-service/loadBalancer/servers/1/url", f"https://{self.domain_name}:{self.web_port}")
 
 
 
