@@ -45,7 +45,7 @@ class MistbornClearSessions(cli.Application):
         """
         Main function for Mistborn CLEARSESSIONS cli functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} exec django /entrypoint python manage.py mfa_reset', shell=True)
+        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} exec django /entrypoint python manage.py clear_mfa_sessions', shell=True)
 
 @MistbornApp.subcommand("getconf")
 class MistbornConf(cli.Application):
