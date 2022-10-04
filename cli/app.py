@@ -3,6 +3,8 @@ import os
 import subprocess
 from plumbum import cli
 
+from cli.util.wg import WGApp
+
 class MistbornApp(cli.Application):
     """
     Main CLI App for Mistborn
@@ -22,6 +24,8 @@ class MistbornApp(cli.Application):
         Main function for the Mistborn CLI
         """
         pass
+
+MistbornApp.subcommand("wg", WGApp)
 
 @MistbornApp.subcommand("pullbuild")
 class MistbornPullBuild(cli.Application):
