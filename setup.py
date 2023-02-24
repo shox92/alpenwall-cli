@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='mistborn-cli',
-    description='Command-line interface for Cyber5K Mistborn',
-    version='0.1.3',
+    description='Command-line interface for Stormblest Mistborn',
+    version='2.0.1',
     url='https://gitlab.com/cyber5k/mistborn-cli.git',
     author='Steven Foerster',
-    author_email='steven@cyber5k.com',
+    author_email='steven@stormblest.com',
     entry_points={
         'console_scripts': [
             'mistborn-cli = cli.app:MistbornApp.run',
@@ -16,6 +16,7 @@ setup(
     setup_requires=[],
     install_requires=[
         'plumbum==1.6.9',
+        'Jinja2==3.1.2',
     ],
     test_suite='tests.test_mistborn-cli',
     keywords=['mistborn']
