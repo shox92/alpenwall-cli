@@ -36,8 +36,8 @@ class MistbornPullBuild(cli.Application):
         """
         Main function for Mistborn pulling and building docker images functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
+        subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
+        subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
 
 @MistbornApp.subcommand("clearsessions")
 class MistbornClearSessions(cli.Application):
@@ -49,7 +49,7 @@ class MistbornClearSessions(cli.Application):
         """
         Main function for Mistborn CLEARSESSIONS cli functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} exec django /entrypoint python manage.py clear_mfa_sessions', shell=True)
+        subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} exec django /entrypoint python manage.py clear_mfa_sessions', shell=True)
 
 @MistbornApp.subcommand("getconf")
 class MistbornConf(cli.Application):
@@ -70,7 +70,7 @@ class MistbornConf(cli.Application):
         """
         Main function for Mistborn CONF cli functionality
         """
-        subprocess.run(f'sudo docker-compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
+        subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
 
 @MistbornApp.subcommand("update")
 class MistbornUpdate(cli.Application):
