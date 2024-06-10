@@ -1,4 +1,4 @@
-image: ubuntu:latest 
+image: ubuntu:jammy
 
 variables:
   GIT_SUBMODULE_STRATEGY: "recursive"
