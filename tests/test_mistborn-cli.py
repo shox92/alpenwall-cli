@@ -6,7 +6,7 @@ import subprocess
 
 #unittest.main(warnings='ignore')
 
-class MistbornCLITest(unittest.TestCase):
+class AlpenWallCLITest(unittest.TestCase):
     config = {}
 
     def setUp(self):
@@ -19,5 +19,5 @@ class MistbornCLITest(unittest.TestCase):
         self.assertTrue(True)
 
     def test_ping(self):
-        result = subprocess.check_output('mistborn-cli ping', shell=True)
+        result = subprocess.check_output('alpenwall-cli ping', shell=True)
         self.assertIn("pong", result.decode('utf-8'))

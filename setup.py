@@ -9,7 +9,7 @@ setup(
     author_email='kontakt@alpenwall.at',
     entry_points={
         'console_scripts': [
-            'alpenwall-cli = cli.app:AlpenwallApp.run',
+            'alpenwall-cli = cli.app:AlpenWallApp.run',
         ],
     },
     packages=find_packages(),

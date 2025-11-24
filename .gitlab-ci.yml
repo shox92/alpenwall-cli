@@ -17,8 +17,8 @@ docker_build:
     - apt-get update
     - apt-get install -y virtualenv libvirt-dev python3-dev git
   script:
-    - virtualenv -p `which python3` envmistborn-cli
-    - source envmistborn-cli/bin/activate
+    - virtualenv -p `which python3` envalpenwall-cli
+    - source envalpenwall-cli/bin/activate
     - pip install .
     - python setup.py test
 

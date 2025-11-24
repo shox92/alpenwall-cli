@@ -50,13 +50,13 @@ class AlpenWallPullBuild(cli.Application):
         # cheat here while pullbuild is present in older update.sh scripts
         subprocess.run(f'sudo systemctl stop AlpenWall-base', shell=True)
         subprocess.run(f'echo "nameserver 1.1.1.2" | sudo tee /etc/resolv.conf', shell=True)
-        ret = subprocess.run(f'sudo AlpenWall-cli dbbackup', shell=True) 
+        ret = subprocess.run(f'sudo alpenwall-cli dbbackup', shell=True) 
 
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
 
         if ret.returncode == 0:
-            subprocess.run(f'sudo AlpenWall-cli dbupgrade', shell=True)
+            subprocess.run(f'sudo alpenwall-cli dbupgrade', shell=True)
 
 @AlpenWallApp.subcommand("dbbackup")
 class AlpenWallDBBackup(cli.Application):
@@ -112,7 +112,7 @@ class AlpenWallDBUpgrade(cli.Application):
                 print(f"Dump is a different PostgreSQL version ({BACKUP_VERSION}) than currently running ({RUNNING_VERSION})")
                 print(f"Restoring database from {backup_file}")
 
-                subprocess.run(f"sudo docker volume rm mistborn_production_postgres_data && \
+                subprocess.run(f"sudo docker volume rm alpenwall_production_postgres_data && \
                                  sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} up -d postgres", shell=True)
                 
                 rc = None
