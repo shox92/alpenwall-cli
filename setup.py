@@ -1,15 +1,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='mistborn-cli',
-    description='Command-line interface for Cyber5K Mistborn',
+    name='alpenwall-cli',
+    description='Command-line interface for AlpenWall',
     version='0.1.4',
-    url='https://gitlab.com/cyber5k/mistborn-cli.git',
-    author='Steven Foerster',
-    author_email='steven@cyber5k.com',
+    url='https://github.com/shox92/alpenwall-cli.git',
+    author='Tim Fehmer',
+    author_email='kontakt@alpenwall.at',
     entry_points={
         'console_scripts': [
-            'mistborn-cli = cli.app:MistbornApp.run',
+            'alpenwall-cli = cli.app:AlpenwallApp.run',
         ],
     },
     packages=find_packages(),
@@ -17,6 +17,6 @@ setup(
     install_requires=[
         'plumbum==1.6.9',
     ],
-    test_suite='tests.test_mistborn-cli',
-    keywords=['mistborn']
+    test_suite='tests.test_alpenwall-cli',
+    keywords=['alpenwall']
 )

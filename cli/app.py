@@ -16,50 +16,50 @@ def sanitize_string(path):
     
     return sanitized_path
 
-class MistbornApp(cli.Application):
+class AlpenWallApp(cli.Application):
     """
-    Main CLI App for Mistborn
+    Main CLI App for AlpenWall
     """
     
     compose_file = cli.SwitchAttr("--compose-file", cli.ExistingFile,
                                  help="The Docker Compose file to use",
-                                 default="/opt/mistborn/base.yml")
+                                 default="/opt/alpenwall/base.yml")
     
     env_file = cli.SwitchAttr("--env-file", cli.ExistingFile,
                                  help="The environment variable file to use with docker compose: [KEY]=[VAL] format",
-                                 default="/opt/mistborn/.env",
+                                 default="/opt/alpenwall/.env",
                                  requires=['--compose-file'])
 
     def main(self):
         """
-        Main function for the Mistborn CLI
+        Main function for the AlpenWall CLI
         """
         pass
 
-MistbornApp.subcommand("wg", WGApp)
+AlpenWallApp.subcommand("wg", WGApp)
 
-@MistbornApp.subcommand("pullbuild")
-class MistbornPullBuild(cli.Application):
+@AlpenWallApp.subcommand("pullbuild")
+class AlpenWallPullBuild(cli.Application):
     """
     Pull & Build docker images (while DNS is up).
     """
     def main(self):
         """
-        Main function for Mistborn pulling and building docker images functionality
+        Main function for AlpenWall pulling and building docker images functionality
         """
         # cheat here while pullbuild is present in older update.sh scripts
-        subprocess.run(f'sudo systemctl stop Mistborn-base', shell=True)
+        subprocess.run(f'sudo systemctl stop AlpenWall-base', shell=True)
         subprocess.run(f'echo "nameserver 1.1.1.2" | sudo tee /etc/resolv.conf', shell=True)
-        ret = subprocess.run(f'sudo mistborn-cli dbbackup', shell=True) 
+        ret = subprocess.run(f'sudo AlpenWall-cli dbbackup', shell=True) 
 
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} pull', shell=True) 
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} build', shell=True) 
 
         if ret.returncode == 0:
-            subprocess.run(f'sudo mistborn-cli dbupgrade', shell=True)
+            subprocess.run(f'sudo AlpenWall-cli dbupgrade', shell=True)
 
-@MistbornApp.subcommand("dbbackup")
-class MistbornDBBackup(cli.Application):
+@AlpenWallApp.subcommand("dbbackup")
+class AlpenWallDBBackup(cli.Application):
     """
     Backup the current database
     """
@@ -71,8 +71,8 @@ class MistbornDBBackup(cli.Application):
         
         return ret.returncode
 
-@MistbornApp.subcommand("dbupgrade")
-class MistbornDBUpgrade(cli.Application):
+@AlpenWallApp.subcommand("dbupgrade")
+class AlpenWallDBUpgrade(cli.Application):
     """
     Check and upgrade the database
     """
@@ -135,8 +135,8 @@ class MistbornDBUpgrade(cli.Application):
 
         return 0
 
-@MistbornApp.subcommand("dbbackuplist")
-class MistbornDBBackupList(cli.Application):
+@AlpenWallApp.subcommand("dbbackuplist")
+class AlpenWallDBBackupList(cli.Application):
     """
     List the available database backup files.
     """
@@ -144,20 +144,20 @@ class MistbornDBBackupList(cli.Application):
 
         print(subprocess.check_output(f"sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm -it postgres bash -c 'ls -ahlt /backups'", shell=True).decode('utf-8').strip())
 
-@MistbornApp.subcommand("clearsessions")
-class MistbornClearSessions(cli.Application):
+@AlpenWallApp.subcommand("clearsessions")
+class AlpenWallClearSessions(cli.Application):
     """
     CLEARSESSIONS sub-command
     """
 
     def main(self):
         """
-        Main function for Mistborn CLEARSESSIONS cli functionality
+        Main function for AlpenWall CLEARSESSIONS cli functionality
         """
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} exec django /entrypoint python manage.py clear_mfa_sessions', shell=True)
 
-@MistbornApp.subcommand("getconf")
-class MistbornConf(cli.Application):
+@AlpenWallApp.subcommand("getconf")
+class AlpenWallConf(cli.Application):
     """
     GETCONF sub-command
     """
@@ -173,37 +173,37 @@ class MistbornConf(cli.Application):
     
     def main(self):
         """
-        Main function for Mistborn CONF cli functionality
+        Main function for AlpenWall CONF cli functionality
         """
         subprocess.run(f'sudo docker compose -f {self.parent.compose_file} --env-file {self.parent.env_file} run --rm django python manage.py getconf {self.user} {self.profile}', shell=True)
 
-@MistbornApp.subcommand("update")
-class MistbornUpdate(cli.Application):
+@AlpenWallApp.subcommand("update")
+class AlpenWallUpdate(cli.Application):
     """
     UPDATE sub-command
     """
     
     update_script = cli.SwitchAttr("--update_script", cli.ExistingFile,
-                                 help="The script to call to update Mistborn",
-                                 default="/opt/mistborn/scripts/update.sh")
+                                 help="The script to call to update AlpenWall",
+                                 default="/opt/alpenwall/scripts/update.sh")
 
     def main(self):
         """
-        Main function for Mistborn update cli functionality
+        Main function for AlpenWall update cli functionality
         """
         return subprocess.check_output(f'sudo {self.update_script}', shell=True)
 
-@MistbornApp.subcommand("ping")
-class MistbornPing(cli.Application):
+@AlpenWallApp.subcommand("ping")
+class AlpenWallPing(cli.Application):
     """
     Subcommand to use for testing purposes.
     """
 
     def main(self):
         """
-        Main function for Mistborn ping
+        Main function for AlpenWall ping
         """
-        print("mistborn-cli: pong")
+        print("alpenwall-cli: pong")
 
 if __name__ == "__main__":
-    MistbornApp.run()
+    AlpenWallApp.run()

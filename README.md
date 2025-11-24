@@ -1,3 +1,3 @@
-# mistborn-cli
+# alpenwall-cli
 
-Command-line interface for mistborn
+Command-line interface for alpenwall

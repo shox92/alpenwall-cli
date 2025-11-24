@@ -14,7 +14,7 @@ def get_wg_confs():
 
 class WGApp(cli.Application):
     """
-    WireGuard App for Mistborn
+    WireGuard App for AlpenWall
     """
 
     def main(self):
